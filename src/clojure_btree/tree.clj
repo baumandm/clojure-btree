@@ -7,11 +7,12 @@
     ([node value]
         (if (nil? node)
             (Node. value nil nil)
-            (let [nodeValue (:value node)]
+            (let [nodeValue (:value node)
+                  comparison (compare nodeValue value)]
                 (cond
-                    (= nodeValue value) node
-                    (< nodeValue value) (assoc node :right (add-value-to-node (:right node) value))
-                    (> nodeValue value) (assoc node :left (add-value-to-node (:left node) value))
+                    (neg? comparison) (assoc node :right (add-value-to-node (:right node) value))
+                    (pos? comparison) (assoc node :left (add-value-to-node (:left node) value))
+                    :else node
                 )
             )
         ))
@@ -48,15 +49,37 @@
         (count-nodes (:right node))
     ))
 
-(defn flatten-nodes-inorder
+(defn traverse-inorder
     "Flattens a tree into a list in order"
     [node]
     (if (nil? node)
         '()
         (concat 
-            (flatten-nodes-inorder (:left node)) 
+            (traverse-inorder (:left node)) 
             (list (:value node)) 
-            (flatten-nodes-inorder (:right node)))))
+            (traverse-inorder (:right node)))))
+
+(defn traverse-breadth-first
+    "Flattens a tree into a list breadth-first"
+    [& nodes]
+    (if (or (empty? nodes) (nil? nodes) (= nodes '(nil)))
+        '()
+        (concat 
+            (map :value nodes)
+            (apply traverse-breadth-first 
+                (filter identity (mapcat (juxt :left :right) nodes)))
+        )
+    ))
+
+(defn traverse-preorder
+    "Flattens a tree into a list in preorder"
+    [node]
+    (if (nil? node)
+        '()
+        (concat 
+            (list (:value node)) 
+            (traverse-preorder (:left node)) 
+            (traverse-preorder (:right node)))))
 
 (defn tree-depth
     "Calculates the depth of the tree, starting at 1 for the root node"

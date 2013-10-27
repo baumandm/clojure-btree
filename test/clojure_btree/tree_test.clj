@@ -76,21 +76,38 @@
     (testing "with 4 nodes"
         (is (= 3 (count-nodes-on-right (add-value-to-node nil 1 2 3 4))))))
 
-(deftest test-flatten-nodes-inorder
+(deftest test-traverse-inorder
     (testing "with nil"
-        (is (= '() (flatten-nodes-inorder nil))))
+        (is (= '() (traverse-inorder nil))))
     (testing "with single node"
-        (is (= '(1) (flatten-nodes-inorder (->Node 1 nil nil)))))
+        (is (= '(1) (traverse-inorder (->Node 1 nil nil)))))
     (testing "with two nodes in order"
-        (is (= '(1 2) (flatten-nodes-inorder (add-value-to-node nil 1 2)))))
+        (is (= '(1 2) (traverse-inorder (add-value-to-node nil 1 2)))))
     (testing "with two nodes out of order"
-        (is (= '(1 2) (flatten-nodes-inorder (add-value-to-node nil 2 1)))))
+        (is (= '(1 2) (traverse-inorder (add-value-to-node nil 2 1)))))
     (testing "with three nodes unbalanced"
-        (is (= '(1 2 3) (flatten-nodes-inorder (add-value-to-node nil 1 2 3)))))
+        (is (= '(1 2 3) (traverse-inorder (add-value-to-node nil 1 2 3)))))
     (testing "with three nodes balanced"
-        (is (= '(1 2 3) (flatten-nodes-inorder (add-value-to-node nil 2 1 3)))))
+        (is (= '(1 2 3) (traverse-inorder (add-value-to-node nil 2 1 3)))))
     (testing "with many nodes"
-        (is (= '(1 2 3 4 5 6 9) (flatten-nodes-inorder (make-tree 1 6 4 5 9 3 2)))))
+        (is (= '(1 2 3 4 5 6 9) (traverse-inorder (make-tree 1 6 4 5 9 3 2)))))
+    )
+
+(deftest test-traverse-preorder
+    (testing "with nil"
+        (is (= '() (traverse-preorder nil))))
+    (testing "with single node"
+        (is (= '(1) (traverse-preorder (->Node 1 nil nil)))))
+    (testing "with two nodes in order"
+        (is (= '(1 2) (traverse-preorder (add-value-to-node nil 1 2)))))
+    (testing "with two nodes out of order"
+        (is (= '(2 1) (traverse-preorder (add-value-to-node nil 2 1)))))
+    (testing "with three nodes unbalanced"
+        (is (= '(1 2 3) (traverse-preorder (add-value-to-node nil 1 2 3)))))
+    (testing "with three nodes balanced"
+        (is (= '(2 1 3) (traverse-preorder (add-value-to-node nil 2 1 3)))))
+    (testing "with many nodes"
+        (is (= '(1 6 4 3 2 5 9) (traverse-preorder (make-tree 1 6 4 5 9 3 2)))))
     )
 
 (deftest test-tree-depth
@@ -176,4 +193,29 @@
     (testing "with remove multiple"
         (is (= (make-tree 7 10 9 3 1 4 2) 
                (remove-value (remove-value (make-tree 5 10 6 5 3 4 9 1 7 2) 5) 6))))
+    )
+
+(deftest test-traverse-breadth-first
+    (testing "with nil"
+        (is (= '() (traverse-breadth-first nil))))
+    (testing "with one node"
+        (is (= '(10) (traverse-breadth-first (make-tree 10)))))
+    (testing "with three balanced nodes"
+        (is (= '(2 1 3) (traverse-breadth-first (make-tree 2 1 3)))))
+    (testing "with two nodes"
+        (is (= '(10 20) (traverse-breadth-first (make-tree 10) (make-tree 20)))))
+    (testing "with many nodes"
+        (is (= '(6 4 9 3 5 2) (traverse-breadth-first (make-tree 6 4 5 3 2 9)))))
+    (testing "with many nodes - b"
+        (is (= '(5 4 10 3 9 12 1 6 11 13 2 7 8) (traverse-breadth-first (make-tree 5 4 10 3 9 12 1 6 11 13 2 7 8)))))
+    )
+
+
+(deftest test-with-strings
+    (testing "create tree"
+        (is (= (->Node "hello" nil (->Node "world" nil nil)) (make-tree "hello" "world"))))
+    (testing "add-value-to-node"
+       (is (= (->Node "hello" nil (->Node "world" nil nil)) (add-value-to-node (make-tree "hello") "world"))))
+    (testing "traverse breadth-first with four nodes"
+        (is (= '("James" "Allison" "Walt" "Arya") (traverse-breadth-first (make-tree "James" "Allison" "Arya" "Walt")))))
     )
