@@ -219,3 +219,37 @@
     (testing "traverse breadth-first with four nodes"
         (is (= '("James" "Allison" "Walt" "Arya") (traverse-breadth-first (make-tree "James" "Allison" "Arya" "Walt")))))
     )
+
+(deftest test-rotate-right
+    (testing "with null"
+        (is (nil? (rotate-right nil))))
+    (testing "with one node"
+        (is (= (make-tree 10) (rotate-right (make-tree 10)))))
+    (testing "with two nodes"
+        (is (= (make-tree 5 10) (rotate-right (make-tree 10 5)))))
+    (testing "with three nodes"
+        (is (= (make-tree 1 5 10) (rotate-right (make-tree 5 10 1)))))
+    (testing "with four nodes"
+        (is (= (make-tree 1 5 10 6) (rotate-right (make-tree 5 10 1 6)))))
+    (testing "with four nodes"
+        (is (= (make-tree 1 5 2 10) (rotate-right (make-tree 5 10 1 2)))))
+    (testing "with five nodes"
+        (is (= (make-tree 2 1 5 3 4 6) (rotate-right (make-tree 5 2 6 1 3 4)))))
+    )
+
+(deftest test-rotate-left
+    (testing "with null"
+        (is (nil? (rotate-left nil))))
+    (testing "with one node"
+        (is (= (make-tree 10) (rotate-left (make-tree 10)))))
+    (testing "with two nodes"
+        (is (= (make-tree 10 5) (rotate-left (make-tree 5 10)))))
+    (testing "with three nodes"
+        (is (= (make-tree 10 5 1) (rotate-left (make-tree 5 10 1)))))
+    (testing "with four nodes"
+        (is (= (make-tree 10 5 1 6) (rotate-left (make-tree 5 10 1 6)))))
+    (testing "with four nodes"
+        (is (= (make-tree 10 5 1 2) (rotate-left (make-tree 5 10 1 2)))))
+    (testing "with five nodes"
+        (is (= (make-tree 10 5 1 6 7 11) (rotate-left (make-tree 5 1 10 6 7 11)))))
+    )

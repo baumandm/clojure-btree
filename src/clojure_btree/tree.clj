@@ -151,3 +151,22 @@
                         (assoc node :value smallest-value
                                     :right (remove-value right smallest-value)))
             )))))
+
+
+(defn rotate-right
+    "Rotates the tree to the right"
+    [node]
+    (cond
+        (nil? node) nil
+        (nil? (:left node)) node
+        :else (let [left-child (:left node)]
+            (assoc left-child :right (assoc node :left (:right left-child))))))
+
+(defn rotate-left
+    "Rotates the tree to the left"
+    [node]
+    (cond
+        (nil? node) nil
+        (nil? (:right node)) node
+        :else (let [right-child (:right node)]
+            (assoc right-child :left (assoc node :right (:left right-child))))))

@@ -1,8 +1,8 @@
 (defproject clojure-btree "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :description "Binary Search Tree implemented in Clojure"
+  :url "https://github.com/baumandm/clojure-btree"
+  :license {:name "Unlicense"
+            :url "http://unlicense.org/"}
   :dependencies [[org.clojure/clojure "1.5.1"]]
   :main ^:skip-aot clojure-btree.core
   :target-path "target/%s"
